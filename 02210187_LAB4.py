@@ -39,6 +39,7 @@ class ArrayQueue:
             return None
         else:
             return self.queue[self.front]
+        
 
     def size(self):
         # Return the current number of elements
