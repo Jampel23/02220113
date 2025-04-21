@@ -39,3 +39,11 @@ def merge_sort(arr):
 
     sorted_arr = divide(arr)
     return sorted_arr, metrics['comparisons'], metrics['accesses']
+
+original = [38, 27, 43, 3, 9, 82, 10]
+sorted_arr, comparisons, accesses = merge_sort(original)
+
+print("Original List:", original)
+print("Sorted using Merge Sort:", sorted_arr)
+print("Number of comparisons:", comparisons)
+print("Number of array accesses:", accesses)
