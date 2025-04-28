@@ -1,95 +1,100 @@
 class Node:
-    def _init_(self, value):
-        self.value = value  # Value of the node
-        self.left = None    # Left child reference
-        self.right = None   # Right child reference
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
 
 class BinaryTree:
-    def _init_(self, root=None):
-        self.root = root  # Root node reference
+    def __init__(self, root_value=None):
+        if root_value is not None:
+            self.root = Node(root_value)
+        else:
+            self.root = None
+        print("Created new Binary Tree")
+        print("Root:", "None" if self.root is None else self.root.value)
 
-    def _repr_(self):
-        return f"Created new Binary Tree Root: {self.root.value if self.root else None}"
+    def height(self):
+        return self._height_helper(self.root)
 
-    # Task 2 - Tree Information Methods
-
-    def height(self, node):
-        """Calculate the maximum depth of the tree"""
+    def _height_helper(self, node):
         if node is None:
             return 0
-        left_height = self.height(node.left)
-        right_height = self.height(node.right)
+        left_height = self._height_helper(node.left)
+        right_height = self._height_helper(node.right)
         return max(left_height, right_height) + 1
 
-    def size(self, node):
-        """Count the total number of nodes"""
+    def size(self):
+        return self._size_helper(self.root)
+
+    def _size_helper(self, node):
         if node is None:
             return 0
-        left_size = self.size(node.left)
-        right_size = self.size(node.right)
-        return left_size + right_size + 1
+        return 1 + self._size_helper(node.left) + self._size_helper(node.right)
 
-    def count_leaves(self, node):
-        """Count number of leaf nodes"""
+    def count_leaves(self):
+        return self._count_leaves_helper(self.root)
+
+    def _count_leaves_helper(self, node):
         if node is None:
             return 0
         if node.left is None and node.right is None:
             return 1
-        return self.count_leaves(node.left) + self.count_leaves(node.right)
+        return self._count_leaves_helper(node.left) + self._count_leaves_helper(node.right)
 
-    def is_full_binary_tree(self, node):
-        """Check if the tree is a full binary tree"""
+    def is_full_binary_tree(self):
+        return self._is_full_helper(self.root)
+
+    def _is_full_helper(self, node):
         if node is None:
             return True
         if node.left is None and node.right is None:
             return True
         if node.left is not None and node.right is not None:
-            return self.is_full_binary_tree(node.left) and self.is_full_binary_tree(node.right)
+            return self._is_full_helper(node.left) and self._is_full_helper(node.right)
         return False
 
-    def is_complete_binary_tree(self, node, index, total_nodes):
-        """Check if the tree is a complete binary tree"""
-        if node is None:
+    def is_complete_binary_tree(self):
+        if self.root is None:
             return True
-        if index >= total_nodes:
-            return False
-        return (self.is_complete_binary_tree(node.left, 2 * index + 1, total_nodes) and
-                self.is_complete_binary_tree(node.right, 2 * index + 2, total_nodes))
+        
+        queue = [self.root]
+        has_empty_child = False
+        
+        while queue:
+            current = queue.pop(0)
+            
+            if current.left:
+                if has_empty_child:
+                    return False
+                queue.append(current.left)
+            else:
+                has_empty_child = True
+                
+            if current.right:
+                if has_empty_child:
+                    return False
+                queue.append(current.right)
+            else:
+                has_empty_child = True
+                
+        return True
 
-    def is_complete(self):
-        """Check if the tree is a complete binary tree (public method)"""
-        total_nodes = self.size(self.root)
-        return self.is_complete_binary_tree(self.root, 0, total_nodes)
 
-
-# Test the Binary Tree Implementation
-if __name__ == "_main_":
-    # Create some nodes
-    node1 = Node(1)
-    node2 = Node(2)
-    node3 = Node(3)
-    node4 = Node(4)
-    node5 = Node(5)
-    node6 = Node(6)
-    node7 = Node(7)
-
-    # Manually link the nodes
-    node1.left = node2
-    node1.right = node3
-    node2.left = node4
-    node2.right = node5
-    node3.left = node6
-    node3.right = node7
-
-    # Create a BinaryTree with the root node
-    tree = BinaryTree(node1)
-
-    # Print tree structure
-    print(tree)
-
-    # Tree Information Methods
-    print(f"Tree Height: {tree.height(tree.root)}")
-    print(f"Total Nodes: {tree.size(tree.root)}")
-    print(f"Leaf Nodes Count: {tree.count_leaves(tree.root)}")
-    print(f"Is Full Binary Tree: {tree.is_full_binary_tree(tree.root)}")
-    print(f"Is Complete Binary Tree: {tree.is_complete()}")
+# Example usage
+if __name__ == "__main__":
+    # Create a binary tree
+    tree = BinaryTree(1)
+    tree.root.left = Node(2)
+    tree.root.right = Node(3)
+    tree.root.left.left = Node(4)
+    tree.root.left.right = Node(5)
+    tree.root.right.left = Node(6)
+    tree.root.right.right = Node(7)
+    
+    # Test the methods
+    print("Tree Height:", tree.height())
+    print("Total Nodes:", tree.size())
+    print("Leaf Nodes Count:", tree.count_leaves())
+    print("Is Full Binary Tree:", tree.is_full_binary_tree())
+    print("Is Complete Binary Tree:", tree.is_complete_binary_tree())
