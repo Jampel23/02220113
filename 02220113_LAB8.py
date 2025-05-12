@@ -137,7 +137,7 @@ class RedBlackTree:
         if node is None:
             node = self.root
         if node != NIL:
-            print(indent, "`- " if last else "|- ", node, sep="")
+            print(indent, "`---- " if last else "|--- ", node, sep="")
             indent += "   " if last else "|  "
             self.print_tree(node.left, indent, False)
             self.print_tree(node.right, indent, True)
