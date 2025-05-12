@@ -127,6 +127,7 @@ class AVLTree:
         else:
             print(" " * (level * 4) + prefix + "None")
             
+            
 if __name__ == "__main__":
     tree = AVLTree()
     tree.insert_value(10)
